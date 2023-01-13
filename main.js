@@ -1,46 +1,113 @@
+// 게임스타트
+document.addEventListener('keydown',function(e){
+    if ( e.code === 'Enter' ){
+        document.getElementById('intro').style.display = 'none';
+        animation();
+    }
+});
+
+var start = document.getElementById('canvas');
+
+document.addEventListener('keydown', function(e){
+    if ( e.code === 'Enter' ){
+        start.className = start.className !== 'show' ? 'show' : 'hide';
+            if (start.className === 'show') {
+                start.style.display = 'block';
+                window.setTimeout(function(){
+                    start.style.opacity = 1;
+                    start.style.transform = 'scale(1)';
+            },0);
+        }
+        if (start.className === 'hide') {
+            start.style.opacity = 0;
+            start.style.transform = 'scale(0)';
+            window.setTimeout(function(){
+                start.style.display = 'none';
+            },700); // timed to match animation-duration
+        }
+    }
+});
+
 // canvas로 캐릭터 만들기
 var canvas = document.getElementById('canvas');
 var ctx = canvas.getContext('2d');
 
-canvas.width = window.innerWidth - 100;
-canvas.height = window.innerHeight - 100;
+canvas.width = window.innerWidth - 400;
+canvas.height = window.innerHeight - 600;
 
 // 공룡 캐릭터 canvas
+var imgDino = new Image();
+var i = 0;
+
+var intervalId = setInterval(function () {
+    i++;
+    if( i%2 == 0 ){
+        imgDino.src = 'dinoLeft.png';
+    } else if( i%2 == 1 ){
+        imgDino.src = 'dinoRight.png';
+        }
+    }, 500);
+
 var dino = {
     x : 10,
     y : 200,
     width : 50,
     height : 50,
     draw(){
-        ctx.fillStyle = 'green';
-        ctx.fillRect(this.x ,this.y ,this.width ,this.height);
+        // ctx.fillStyle = 'green';
+        // ctx.fillRect(this.x ,this.y ,this.width ,this.height);
+        ctx.drawImage(imgDino, this.x, this.y, this.width, this.height)
     }
 }
 
 // 장애물
+var imgCactus = new Image();
+imgCactus.src = 'cactus.png';
+
 class Cactus{
     constructor(){
-        this.x = 500;
-        this.y = 220;
-        this.width = 30;
-        this.height = 30;
+        this.x = 1000;
+        this.y = 200;
+        this.width = 35;
+        this.height = 50;
     }
     draw(){
-        ctx.fillStyle = 'red';
-        ctx.fillRect(this.x ,this.y ,this.width ,this.height);
+        // ctx.fillStyle = 'red';
+        // ctx.fillRect(this.x ,this.y ,this.width ,this.height);
+        ctx.drawImage(imgCactus, this.x, this.y, this.width, this.height)
     }
 }
+
+// 배경
+var imgBg = new Image();
+imgBg.src = 'bg.png';
+
+class Bg{
+    constructor(){
+        this.x = 0;
+        this.y = 248;
+        this.width = window.innerWidth;
+        this.height = 200;
+    }
+    draw(){
+        // ctx.fillStyle = 'red';
+        // ctx.fillRect(this.x ,this.y ,this.width ,this.height);
+        ctx.drawImage(imgBg, this.x, this.y, this.width, this.height)
+    }
+}
+
 
 // 애니메이션
 var timer = 0;
 var cactusArr = [];
+var bgArr = [];
 var JumpTimer = 0;
 var animationMove;
 
 function animation(){
+
     animationMove = requestAnimationFrame(animation);
     timer++;
-
     ctx.clearRect(0,0, canvas.width, canvas.height);
 
     // 장애물 생성간격
@@ -54,32 +121,42 @@ function animation(){
         if( a.x < 0 ){
             o.splice(i,1);
         }
-        a.x--;
+        a.x -=5;
 
         touch(dino, a);
         a.draw();
     });
 
+    // 배경 무한반복
+    if (timer % 50 === 0){
+        var bg = new Bg();
+        bgArr.push(bg);
+    }
+
+    bgArr.forEach((a)=>{
+        a.x -= 5;
+        a.draw();
+    });
+    
     // 캐릭터 점프기능 if문
     if ( Jumping == true ){
-        dino.y -= 3;
+        dino.y -= 8;
         JumpTimer++;
     }
-    if ( JumpTimer > 50 ){
+    if ( JumpTimer > 20 ){
         Jumping = false;
         JumpTimer = 0;
 
     }
     if ( Jumping == false ){
         if( dino.y < 200 ){
-            dino.y += 2;
+            dino.y += 6;
         }
     }
-    
     dino.draw();
 }
 
-animation();
+
 
 // 캐릭터 장애물 충돌요소
 function touch( dino, cactus ){
