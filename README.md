@@ -9,13 +9,17 @@ Space bar 키를 입력하여 점프기능
 
 
 ### - JavaScript
-requestAnimationFrame() 를 사용하여 제작
+requestAnimationFrame() 를 이용하여 제작
 
 addEventListener keydown 을 이용하여 캐릭터의 점프기능 및 스타트기능 생성
 
 canvas 를 이용하여 캐릭터, 장애물 생성
 
 Array forEach를 이용하여 움직이는 배경 생성
+
+Math.random()를 이용하여 장애물 랜덤 생성
+
+setTimeOut()를 이용하여 중복점프 방지
 
 ### - CSS
 
