@@ -1,23 +1,3 @@
-// 게임스타트
-document.addEventListener('keydown',function(e){
-    if ( e.code === 'Enter' ){
-        document.getElementById('intro').style.display = 'none';
-        animation();
-    }
-},{ once : true});
-
-var start = document.getElementById('canvas');
-
-document.addEventListener('keydown', function(e){
-    if ( e.code === 'Enter' ){
-        start.style.display = 'block';
-                window.setTimeout(function(){
-                    start.style.opacity = 1;
-                    start.style.transform = 'scale(1)';
-            },0);
-    }
-});
-
 // document.addEventListener('keydown', function(e){
 //     if ( e.code === 'Enter' ){
 //         start.className = start.className !== 'show' ? 'show' : 'hide';
@@ -115,7 +95,7 @@ var JumpTimer = 0;
 var animationMove;
 
 function animation(){
-
+    
     animationMove = requestAnimationFrame(animation);
     timer++;
     ctx.clearRect(0,0, canvas.width, canvas.height);
@@ -150,13 +130,12 @@ function animation(){
     
     // 캐릭터 점프기능 if문
     if ( Jumping == true ){
-        dino.y -= 8;
-        JumpTimer++;
+            dino.y -= 8;
+            JumpTimer++;
     }
     if ( JumpTimer > 20 ){
         Jumping = false;
         JumpTimer = 0;
-
     }
     if ( Jumping == false ){
         if( dino.y < 200 ){
@@ -164,6 +143,7 @@ function animation(){
         }
     }
     dino.draw();
+    console.log(JumpTimer);
 }
 
 
@@ -180,8 +160,26 @@ function touch( dino, cactus ){
 
 // 캐릭터 점프 addEventListener
 var Jumping = false;
-document.addEventListener('keydown',function(e){
-    if ( e.code === 'Space' ){
-        Jumping = true;
-    }
+    document.addEventListener('keydown',function(e){
+        if ( e.code === 'Space' ){
+            Jumping = true;
+        }
+    });
+
+// 게임스타트
+
+var start = document.getElementById('canvas');
+var startgame = false;
+
+document.getElementById('start').addEventListener('click', function(e){
+    document.getElementById('intro').style.display = 'none';
+    start.style.display = 'block';
+            window.setTimeout(function(){
+                start.style.opacity = 1;
+                start.style.transform = 'scale(1)';
+                startgame = true;
+                if( startgame == true ){
+                    animation();
+                }
+        },0);
 });

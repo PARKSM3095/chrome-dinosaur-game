@@ -10,13 +10,31 @@
 </head>
 <body>
     <div id="intro">
-
         <div class="p-absolute">
-            <img src="img/introimg.png"/>
-            <h1>Enter키를 눌러 시작하세요!</h1>
+            <img class="bounce" id='start' src="img/introimg.png"/>
+            <h1 class="slideUp">공룡을 클릭해서 시작하세요!</h1>
         </div>
     </div>
-    <canvas id="canvas" style="display:none;"></canvas>
+    <canvas id="canvas" style="display:none;">
+    </canvas>
+    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+    <script>
+        $(window).scroll(function() {
+            $('#animatedElement').each(function(){
+            var imagePos = $(this).offset().top;
+    
+            var topOfWindow = $(window).scrollTop();
+                if (imagePos < topOfWindow+400) {
+                    $(this).addClass("slideUp");
+                }
+            });
+        });
+
+        $('#animatedElement').click(function() {
+            $(this).addClass("slideUp");
+        });
+    </script>
     <script src="main.js"></script>
+    
 </body>
 </html>
