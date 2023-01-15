@@ -23,7 +23,7 @@ var canvas = document.getElementById('canvas');
 var ctx = canvas.getContext('2d');
 
 canvas.width = window.innerWidth - 400;
-canvas.height = window.innerHeight - 600;
+canvas.height = window.innerHeight - 400;
 
 // 공룡 캐릭터 canvas
 var imgDino = new Image();
@@ -40,12 +40,10 @@ var intervalId = setInterval(function () {
 
 var dino = {
     x : 10,
-    y : 200,
+    y : 300,
     width : 50,
     height : 50,
     draw(){
-        // ctx.fillStyle = 'green';
-        // ctx.fillRect(this.x ,this.y ,this.width ,this.height);
         ctx.drawImage(imgDino, this.x, this.y, this.width, this.height)
     }
 }
@@ -56,14 +54,12 @@ imgCactus.src = 'img/cactus.png';
 
 class Cactus{
     constructor(){
-        this.x = 1000;
-        this.y = 200;
+        this.x = window.innerWidth;
+        this.y = 300;
         this.width = 35;
         this.height = 50;
     }
     draw(){
-        // ctx.fillStyle = 'red';
-        // ctx.fillRect(this.x ,this.y ,this.width ,this.height);
         ctx.drawImage(imgCactus, this.x, this.y, this.width, this.height)
     }
 }
@@ -75,13 +71,11 @@ imgBg.src = 'img/bg.png';
 class Bg{
     constructor(){
         this.x = 0;
-        this.y = 248;
+        this.y = 348;
         this.width = window.innerWidth;
         this.height = 200;
     }
     draw(){
-        // ctx.fillStyle = 'red';
-        // ctx.fillRect(this.x ,this.y ,this.width ,this.height);
         ctx.drawImage(imgBg, this.x, this.y, this.width, this.height)
     }
 }
@@ -101,7 +95,8 @@ function animation(){
     ctx.clearRect(0,0, canvas.width, canvas.height);
 
     // 장애물 생성간격
-    if(timer % 200 === 0){
+    var random = Math.floor(Math.random() * 1200);
+    if(timer % random === 0){
         var cactus = new Cactus();
         cactusArr.push(cactus);
     }
@@ -130,20 +125,19 @@ function animation(){
     
     // 캐릭터 점프기능 if문
     if ( Jumping == true ){
-            dino.y -= 8;
-            JumpTimer++;
+        dino.y -= 8;
+        JumpTimer++;
     }
     if ( JumpTimer > 20 ){
         Jumping = false;
         JumpTimer = 0;
     }
     if ( Jumping == false ){
-        if( dino.y < 200 ){
+        if( dino.y < 300 ){
             dino.y += 6;
         }
     }
     dino.draw();
-    console.log(JumpTimer);
 }
 
 
@@ -160,9 +154,16 @@ function touch( dino, cactus ){
 
 // 캐릭터 점프 addEventListener
 var Jumping = false;
+var JumpDelay = 2;
     document.addEventListener('keydown',function(e){
-        if ( e.code === 'Space' ){
-            Jumping = true;
+        if( Jumping === false && JumpDelay === 2 ){
+            if ( e.code === 'Space' ){
+                Jumping = true;
+                JumpDelay = 1;
+                setTimeout(function(){
+                    JumpDelay = 2;
+                },800)
+            }
         }
     });
 
