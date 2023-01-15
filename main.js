@@ -1,23 +1,3 @@
-// document.addEventListener('keydown', function(e){
-//     if ( e.code === 'Enter' ){
-//         start.className = start.className !== 'show' ? 'show' : 'hide';
-//             if (start.className === 'show') {
-//                 start.style.display = 'block';
-//                 window.setTimeout(function(){
-//                     start.style.opacity = 1;
-//                     start.style.transform = 'scale(1)';
-//             },0);
-//         }
-//         if (start.className === 'hide') {
-//             start.style.opacity = 0;
-//             start.style.transform = 'scale(0)';
-//             window.setTimeout(function(){
-//                 start.style.display = 'none';
-//             },700); // timed to match animation-duration
-//         }
-//     }
-// });
-
 // canvas로 캐릭터 만들기
 var canvas = document.getElementById('canvas');
 var ctx = canvas.getContext('2d');
@@ -49,10 +29,10 @@ var dino = {
 }
 
 // 장애물
-var imgCactus = new Image();
-imgCactus.src = 'img/cactus.png';
+var imgCactus1 = new Image();
+imgCactus1.src = 'img/cactus1.png';
 
-class Cactus{
+class Cactus1{
     constructor(){
         this.x = window.innerWidth;
         this.y = 300;
@@ -60,11 +40,26 @@ class Cactus{
         this.height = 50;
     }
     draw(){
-        ctx.drawImage(imgCactus, this.x, this.y, this.width, this.height)
+        ctx.drawImage(imgCactus1, this.x, this.y, this.width, this.height)
     }
 }
 
-// 배경
+var imgCactus2 = new Image();
+imgCactus2.src = 'img/cactus2.png';
+
+class Cactus2{
+    constructor(){
+        this.x = window.innerWidth;
+        this.y = 317;
+        this.width = 49;
+        this.height = 33;
+    }
+    draw(){
+        ctx.drawImage(imgCactus2, this.x, this.y, this.width, this.height)
+    }
+}
+
+// 바닥배경
 var imgBg = new Image();
 imgBg.src = 'img/bg.png';
 
@@ -80,25 +75,64 @@ class Bg{
     }
 }
 
+// 구름배경
+var imgcloud = new Image();
+imgcloud.src = 'img/cloud.png';
+
+class Cloud{
+    constructor(){
+        this.x = window.innerWidth;
+        this.y = Math.random() * (100 - 150 + 1) + 150;
+        this.width = 96;
+        this.height = 52;
+    }
+    draw(){
+        ctx.drawImage(imgcloud, this.x, this.y, this.width, this.height)
+    }
+}
+
+// 점수판
+function score() {
+    const ctx = document.getElementById("canvas").getContext("2d");
+    ctx.font = "bold 24px Nanum Gothic";
+    ctx.fillText("점수 : " + timer, 20 , 40);
+}
+
+// 게임오버
+function gameover() {
+    const ctx = document.getElementById("canvas").getContext("2d");
+    ctx.font = "bold 60px Nanum Gothic";
+    ctx.fillText("GAME OVER", 40, 120);
+}
+function retry() {
+    const ctx = document.getElementById("canvas").getContext("2d");
+    ctx.font = "bold 24px Nanum Gothic";
+    ctx.fillText("다시 하려면 클릭!!", 40, 170);
+}
 
 // 애니메이션
 var timer = 0;
 var cactusArr = [];
 var bgArr = [];
+var cloudArr = [];
 var JumpTimer = 0;
 var animationMove;
 
 function animation(){
-    
     animationMove = requestAnimationFrame(animation);
     timer++;
     ctx.clearRect(0,0, canvas.width, canvas.height);
-
+    
     // 장애물 생성간격
-    var random = Math.floor(Math.random() * 1200);
+    var random = Math.floor(Math.random() * 2000);
     if(timer % random === 0){
-        var cactus = new Cactus();
-        cactusArr.push(cactus);
+        var cactus1 = new Cactus1();
+        cactusArr.push(cactus1);
+    }
+
+    if(timer % random === 1){
+        var cactus2 = new Cactus2();
+        cactusArr.push(cactus2);
     }
 
     // 장애물 이동기능
@@ -107,12 +141,11 @@ function animation(){
             o.splice(i,1);
         }
         a.x -=5;
-
         touch(dino, a);
         a.draw();
     });
 
-    // 배경 무한반복
+    // 바닥배경
     if (timer % 50 === 0){
         var bg = new Bg();
         bgArr.push(bg);
@@ -120,6 +153,18 @@ function animation(){
 
     bgArr.forEach((a)=>{
         a.x -= 5;
+        a.draw();
+    });
+
+    // 구름배경
+    var randomCloud = Math.floor(Math.random() * 1200);
+
+    if (timer % randomCloud === 0){
+        var cloud = new Cloud();
+        cloudArr.push(cloud);
+    }
+    cloudArr.forEach((a)=>{
+        a.x -= 4;
         a.draw();
     });
     
@@ -138,6 +183,7 @@ function animation(){
         }
     }
     dino.draw();
+    score()
 }
 
 
@@ -149,6 +195,10 @@ function touch( dino, cactus ){
     if ( Xgap < 0 && Ygap < 0 ){
         ctx.clearRect(0,0, canvas.width, canvas.height);
         cancelAnimationFrame(animationMove);
+        gameover();
+        setTimeout(function(){
+            retry();
+        },1000);
     };
 }
 
@@ -184,3 +234,6 @@ document.getElementById('start').addEventListener('click', function(e){
                 }
         },0);
 });
+
+// 재도전
+
