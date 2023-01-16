@@ -23,7 +23,9 @@ Math.random()를 이용하여 장애물 랜덤 생성
 
 setTimeOut()를 이용하여 중복점프 방지
 
-score 기능 추가
+score 기능
+
+gameover 안내 및 클릭시 재시작
 
 
 
