@@ -20,7 +20,7 @@ var intervalId = setInterval(function () {
 
 var dino = {
     x : 10,
-    y : 300,
+    y : 400,
     width : 50,
     height : 50,
     draw(){
@@ -35,7 +35,7 @@ imgCactus1.src = 'img/cactus1.png';
 class Cactus1{
     constructor(){
         this.x = window.innerWidth;
-        this.y = 300;
+        this.y = 400;
         this.width = 35;
         this.height = 50;
     }
@@ -50,7 +50,7 @@ imgCactus2.src = 'img/cactus2.png';
 class Cactus2{
     constructor(){
         this.x = window.innerWidth;
-        this.y = 317;
+        this.y = 417;
         this.width = 49;
         this.height = 33;
     }
@@ -66,7 +66,7 @@ imgBg.src = 'img/bg.png';
 class Bg{
     constructor(){
         this.x = 0;
-        this.y = 348;
+        this.y = 448;
         this.width = window.innerWidth;
         this.height = 200;
     }
@@ -99,16 +99,24 @@ function score() {
 }
 
 // 게임오버
-function gameover() {
-    const ctx = document.getElementById("canvas").getContext("2d");
-    ctx.font = "bold 60px Nanum Gothic";
-    ctx.fillText("GAME OVER", 40, 120);
+var imggameover = new Image();
+imggameover.src = 'img/gameover.jpg';
+
+var gameover = {
+    x : 150,
+    y : 0,
+    width : canvas.width - 300,
+    height : canvas.height,
+    zIndex : 5,
+    draw(){
+        ctx.drawImage(imggameover, this.x, this.y, this.width, this.height)
+    }
 }
-function retry() {
-    const ctx = document.getElementById("canvas").getContext("2d");
-    ctx.font = "bold 24px Nanum Gothic";
-    ctx.fillText("다시 하려면 클릭!!", 40, 170);
-}
+// function retry() {
+//     const ctx = document.getElementById("canvas").getContext("2d");
+//     ctx.font = "bold 24px Nanum Gothic";
+//     ctx.fillText("다시 도전하기!!", 40, 170);
+// }
 
 // 애니메이션
 var timer = 0;
@@ -178,7 +186,7 @@ function animation(){
         JumpTimer = 0;
     }
     if ( Jumping == false ){
-        if( dino.y < 300 ){
+        if( dino.y < 400 ){
             dino.y += 6;
         }
     }
@@ -195,12 +203,12 @@ function touch( dino, cactus ){
     if ( Xgap < 0 && Ygap < 0 ){
         ctx.clearRect(0,0, canvas.width, canvas.height);
         cancelAnimationFrame(animationMove);
-        gameover();
-        setTimeout(function(){
-            retry();
-        },1000);
+        gameover.draw();
+        document.addEventListener('click',function(){
+            location.reload();
+        });
+        }
     };
-}
 
 // 캐릭터 점프 addEventListener
 var Jumping = false;
@@ -236,4 +244,3 @@ document.getElementById('start').addEventListener('click', function(e){
 });
 
 // 재도전
-
