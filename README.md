@@ -1,5 +1,8 @@
 # JavaScript로 만든 chrome dinosaur game
 
+### Link : [chrome dinosaur game](https://parksm3095.github.io/chrome-dinosaur-game/)
+
+
 ### - 실행방법
 index.html 을 웹브라우저에서 실행
 
